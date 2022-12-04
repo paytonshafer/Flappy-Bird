@@ -171,9 +171,11 @@ def main():
     while run:
         clock.tick(30)
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                bird.jump()
             if event.type == pygame.QUIT:
                 run = False
-        #bird.move()
+        bird.move()
         add_pipe = False
         rem = []
         for pipe in pipes:
