@@ -146,10 +146,6 @@ class Base:
         win.blit(self.IMG, (self.x1, self.y))
         win.blit(self.IMG, (self.x2, self.y))
 
-
-
-        
-
 def draw_window(win, bird, pipes, base):
     win.blit(BG_IMG, (0,0))
     for pipe in pipes:
@@ -164,8 +160,6 @@ def main():
     base = Base(730)
 
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-    pygame.font.init()
-    my_font = pygame.font.SysFont('Comic Sans MS', 30)
     clock = pygame.time.Clock()
 
     run = True
@@ -199,8 +193,6 @@ def main():
 
         base.move()
         draw_window(win, bird, pipes, base)
-        strScore = my_font.render(("SCORE: " + str(score)), False, (0,0,0))
-        win.blit(strScore,(0,0))
 
     pygame.quit()
     quit()
