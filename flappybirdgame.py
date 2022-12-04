@@ -3,6 +3,7 @@ import neat
 import time
 import os
 import random
+pygame.font.init()
 
 WIN_WIDTH = 500
 WIN_HEIGHT = 800
@@ -11,6 +12,8 @@ BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs","bir
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs","pipe.png")))
 BG_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs","bg.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs","base.png")))
+
+STAT_FONT = pygame.font.SysFont("comicsans", 50)
 
 class Bird:
     IMGS = BIRD_IMGS
@@ -146,10 +149,12 @@ class Base:
         win.blit(self.IMG, (self.x1, self.y))
         win.blit(self.IMG, (self.x2, self.y))
 
-def draw_window(win, bird, pipes, base):
+def draw_window(win, bird, pipes, base, score):
     win.blit(BG_IMG, (0,0))
     for pipe in pipes:
         pipe.draw(win)
+    text = STAT_FONT.render("Score: " + str(score), 1, (255,255,255))
+    win.blit(text, (WIN_WIDTH - 10 - text.get_width(), 10))
     base.draw(win)
     bird.draw(win)
     pygame.display.update()
@@ -163,6 +168,7 @@ def main():
     clock = pygame.time.Clock()
 
     run = True
+    qvar = False
     score = 0
     while run:
         clock.tick(30)
@@ -171,12 +177,13 @@ def main():
                 bird.jump()
             if event.type == pygame.QUIT:
                 run = False
+                qvar = True
         bird.move()
         add_pipe = False
         rem = []
         for pipe in pipes:
             if pipe.collide(bird):
-                run = False
+                qvar = True
             if pipe.x + pipe.PIPE_TOP.get_width() < 0:
                 rem.append(pipe)
             if not pipe.passed and pipe.x < bird.x:
@@ -191,8 +198,38 @@ def main():
         for r in rem:
             pipes.remove(r)
 
+        if bird.y + bird.img.get_height() >= 730:
+            qvar = True
+
         base.move()
-        draw_window(win, bird, pipes, base)
+        draw_window(win, bird, pipes, base, score)
+
+        if qvar:
+            win.fill((0,0,0))
+            scoretxt = STAT_FONT.render("Score:" + str(score), 1, (255,255,255) )
+            text = STAT_FONT.render("Press any key to" , 1, (255,255,255))
+            text2 = STAT_FONT.render("  play again,", 1, (255,255,255))
+            text3 = STAT_FONT.render("click to quit!", 1, (255,255,255))
+            win.blit(scoretxt,(0,0))
+            win.blit(text,(0,50))
+            win.blit(text2,(0,100))
+            win.blit(text3,(0,150))
+            pygame.display.update()
+        
+            while qvar:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        qvar = False
+                        run = True      
+                        bird = Bird(230,350)
+                        pipes = [Pipe(700)]
+                        base = Base(730)
+                        draw_window(win, bird, pipes, base, score)
+                        pygame.display.update()  
+                        score = 0          
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        qvar = False
+                        run = False
 
     pygame.quit()
     quit()
