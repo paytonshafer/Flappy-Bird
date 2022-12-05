@@ -82,11 +82,11 @@ class Bird:
 
 
 class Pipe:
-    GAP = 250
     VEL = 5
 
-    def __init__(self, x):
+    def __init__(self, x, g):
         self.x = x
+        self.GAP = g
         self.height = 0
         self.gap = 100
         self.top = 0
@@ -96,9 +96,6 @@ class Pipe:
 
         self.passed = False
         self.set_height()
-
-    def set_GAP(self,g):
-        self.GAP = g
 
     def set_height(self):
         self.height = random.randrange(50,450)
@@ -174,7 +171,7 @@ def play_again(win,score):
     win.blit(text3,(0,150))
     pygame.display.update()
 
-def diff(win):
+def diff_display(win):
     win.fill((0,0,0))
     easy = STAT_FONT.render("Press 1 for easy", 1, (255,255,255))
     med = STAT_FONT.render("Press 2 for medium", 1, (255,255,255))
@@ -185,29 +182,29 @@ def diff(win):
     pygame.display.update()
 
 def main():
-    pygame.display.set_caption('Flappy Bird')
-    bird = Bird(230,350)
-    pipes = [Pipe(700)]
-    base = Base(730)
-
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     clock = pygame.time.Clock()
 
-    diff(win)
+    diff_display(win)
     start = True
+    diff = 2
     while start:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    pipes[0].set_GAP(300)
+                    pipes = [Pipe(700, 200)]
+                    diff = 1
                     start = False
                 if event.key == pygame.K_2:
-                    pipes[0].set_GAP(250)
+                    pipes = [Pipe(700, 250)]
+                    diff = 2
                     start = False                
                 if event.key == pygame.K_3:
-                    pipes[0].set_GAP(200)
+                    pipes = [Pipe(700, 200)]
+                    diff = 3
                     start = False
-
+    bird = Bird(230,350)
+    base = Base(730)
     qvar = False
     run = True 
     score = 0 
@@ -234,7 +231,12 @@ def main():
 
         if add_pipe:
             score += 1
-            pipes.append(Pipe(700))
+            if diff == 1:
+                pipes.append(Pipe(700,300))
+            elif diff == 2:
+                    pipes.append(Pipe(700,250))
+            elif diff == 3:
+                    pipes.append(Pipe(700,200))
 
         for r in rem:
             pipes.remove(r)
@@ -258,7 +260,12 @@ def main():
                         run = True 
                         score = 0        
                         bird = Bird(230,350)
-                        pipes = [Pipe(700)]
+                        if diff == 1:
+                            pipes = [Pipe(700,300)]
+                        elif diff == 2:
+                            pipes = [Pipe(700,250)]
+                        elif diff == 3:
+                            pipes = [Pipe(700,200)]
                         base = Base(730)
                         draw_window(win, bird, pipes, base, score)
                         pygame.display.update()      
