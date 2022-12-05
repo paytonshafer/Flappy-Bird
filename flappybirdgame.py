@@ -158,7 +158,7 @@ def draw_window(win, bird, pipes, base, score):
     base.draw(win)
     bird.draw(win)
     pygame.display.update()
-   
+
 def main():
     bird = Bird(230,350)
     pipes = [Pipe(700)]
@@ -167,9 +167,9 @@ def main():
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     clock = pygame.time.Clock()
 
-    run = True
     qvar = False
-    score = 0
+    run = True 
+    score = 0 
     while run:
         clock.tick(30)
         for event in pygame.event.get():
@@ -198,6 +198,9 @@ def main():
         for r in rem:
             pipes.remove(r)
 
+        if bird.y + bird.img.get_height() <= 1:
+            qvar = True 
+
         if bird.y + bird.img.get_height() >= 730:
             qvar = True
 
@@ -220,13 +223,13 @@ def main():
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
                         qvar = False
-                        run = True      
+                        run = True 
+                        score = 0        
                         bird = Bird(230,350)
                         pipes = [Pipe(700)]
                         base = Base(730)
                         draw_window(win, bird, pipes, base, score)
-                        pygame.display.update()  
-                        score = 0          
+                        pygame.display.update()      
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         qvar = False
                         run = False
