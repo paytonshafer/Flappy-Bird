@@ -97,6 +97,9 @@ class Pipe:
         self.passed = False
         self.set_height()
 
+    def set_GAP(self,g):
+        self.GAP = g
+
     def set_height(self):
         self.height = random.randrange(50,450)
         self.top = self.height - self.PIPE_TOP.get_height()
@@ -159,13 +162,51 @@ def draw_window(win, bird, pipes, base, score):
     bird.draw(win)
     pygame.display.update()
 
+def play_again(win,score):
+    win.fill((0,0,0))
+    scoretxt = STAT_FONT.render("Score:" + str(score), 1, (255,255,255) )
+    text = STAT_FONT.render("Press any key to" , 1, (255,255,255))
+    text2 = STAT_FONT.render("  play again,", 1, (255,255,255))
+    text3 = STAT_FONT.render("click to quit!", 1, (255,255,255))
+    win.blit(scoretxt,(0,0))
+    win.blit(text,(0,50))
+    win.blit(text2,(0,100))
+    win.blit(text3,(0,150))
+    pygame.display.update()
+
+def diff(win):
+    win.fill((0,0,0))
+    easy = STAT_FONT.render("Press 1 for easy", 1, (255,255,255))
+    med = STAT_FONT.render("Press 2 for medium", 1, (255,255,255))
+    hard = STAT_FONT.render("Press 3 for hard", 1, (255,255,255))
+    win.blit(easy,(0,0))
+    win.blit(med,(0,50))
+    win.blit(hard,(0,100))
+    pygame.display.update()
+
 def main():
+    pygame.display.set_caption('Flappy Bird')
     bird = Bird(230,350)
     pipes = [Pipe(700)]
     base = Base(730)
 
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     clock = pygame.time.Clock()
+
+    diff(win)
+    start = True
+    while start:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    pipes[0].set_GAP(300)
+                    start = False
+                if event.key == pygame.K_2:
+                    pipes[0].set_GAP(250)
+                    start = False                
+                if event.key == pygame.K_3:
+                    pipes[0].set_GAP(200)
+                    start = False
 
     qvar = False
     run = True 
@@ -177,7 +218,7 @@ def main():
                 bird.jump()
             if event.type == pygame.QUIT:
                 run = False
-                qvar = True
+                qvar = False
         bird.move()
         add_pipe = False
         rem = []
@@ -208,16 +249,7 @@ def main():
         draw_window(win, bird, pipes, base, score)
 
         if qvar:
-            win.fill((0,0,0))
-            scoretxt = STAT_FONT.render("Score:" + str(score), 1, (255,255,255) )
-            text = STAT_FONT.render("Press any key to" , 1, (255,255,255))
-            text2 = STAT_FONT.render("  play again,", 1, (255,255,255))
-            text3 = STAT_FONT.render("click to quit!", 1, (255,255,255))
-            win.blit(scoretxt,(0,0))
-            win.blit(text,(0,50))
-            win.blit(text2,(0,100))
-            win.blit(text3,(0,150))
-            pygame.display.update()
+            play_again(win, score)
         
             while qvar:
                 for event in pygame.event.get():
