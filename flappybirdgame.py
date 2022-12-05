@@ -162,13 +162,17 @@ def draw_window(win, bird, pipes, base, score):
 def play_again(win,score):
     win.fill((0,0,0))
     scoretxt = STAT_FONT.render("Score:" + str(score), 1, (255,255,255) )
-    text = STAT_FONT.render("Press any key to" , 1, (255,255,255))
-    text2 = STAT_FONT.render("  play again,", 1, (255,255,255))
+    difftxt1 = STAT_FONT.render("Change difficulty:", 1, (255,255,255))
+    difftxt2 = STAT_FONT.render("Press 1, 2, 3", 1, (255,255,255))
+    text = STAT_FONT.render("Press any other key" , 1, (255,255,255))
+    text2 = STAT_FONT.render("to play again", 1, (255,255,255))
     text3 = STAT_FONT.render("click to quit!", 1, (255,255,255))
     win.blit(scoretxt,(0,0))
-    win.blit(text,(0,50))
-    win.blit(text2,(0,100))
-    win.blit(text3,(0,150))
+    win.blit(difftxt1,(0,50))
+    win.blit(difftxt2,(0,100))
+    win.blit(text,(0,150))
+    win.blit(text2,(0,200))
+    win.blit(text3,(0,250))
     pygame.display.update()
 
 def diff_display(win):
@@ -256,6 +260,16 @@ def main():
             while qvar:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_1:
+                                pipes = [Pipe(700, 200)]
+                                diff = 1
+                            if event.key == pygame.K_2:
+                                pipes = [Pipe(700, 250)]
+                                diff = 2          
+                            if event.key == pygame.K_3:
+                                pipes = [Pipe(700, 200)]
+                                diff = 3
                         qvar = False
                         run = True 
                         score = 0        
