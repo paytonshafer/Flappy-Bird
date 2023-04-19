@@ -6,4 +6,7 @@ This folder contains the code for the whole game of flappy bird. Once the game h
 difficulty is decided by the size of the gap between the pipes. 
 
 ## flappybirdai
-This folder contains a version of flappy bird that uses _ to have ai play the game. When the program is ran the 
+This folder contains a version of flappy bird that uses neat to have ai play the game. When the program is ran the ai starts and runs it's trials to try
+to create the perfect bird.
+
+
